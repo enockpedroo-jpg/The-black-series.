@@ -1,0 +1,17 @@
+{
+  "name": "THE BLACK SERIES",
+  "short_name": "BlackSeries",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#070709",
+  "theme_color": "#d4af37",
+  "description": "Plataforma oficial de séries e vídeos curtos 100% Moçambicanos.",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
