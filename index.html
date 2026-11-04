@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>THE BLACK SERIES - Séries Moçambicanas</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#d4af37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Black Series">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #070709;
+      --card-bg: rgba(22, 22, 28, 0.85);
+      --card-border: rgba(212, 175, 55, 0.25);
+      --gold: #d4af37;
+      --gold-light: #f7e07c;
+      --gold-dark: #997a15;
+      --emola: #f5a623;
+      --mpesa: #e21a22;
+      --text: #f0f0f5;
+      --text-muted: #9e9ea8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(226, 26, 34, 0.06) 0%, transparent 40%);
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 7, 9, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      border-radius: 8px;
+      filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.4));
+    }
+
+    .brand-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      background: linear-gradient(135deg, #fff 20%, var(--gold-light) 60%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-subtitle {
+      font-size: 0.68rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+      color: #000;
+      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35);
+    }
+    .btn-gold:hover { transform: translateY(-1px); filter: brightness(1.1); }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-install {
+      background: #25d366;
+      color: #000;
+      font-weight: 700;
+      display: none; /* Ativado via JS se PWA suportado */
+    }
+
+    /* CONTAINER PRINCIPAL */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 18px 14px 90px;
+    }
+
+    /* BANNER DE INSCRIÇÃO VIP */
+    .vip-banner {
+      background: linear-gradient(135deg, rgba(30, 26, 12, 0.9), rgba(15, 15, 20, 0.95));
+      border: 1px solid var(--gold);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    }
+
+    .vip-info h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      color: var(--gold-light);
+      margin-bottom: 4px;
+    }
+    .vip-info p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* REPRODUTOR DE VÍDEO PRINCIPAL */
+    .player-card {
+      background: #000;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.8);
+      margin-bottom: 24px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      background: #000;
+      aspect-ratio: 9/16;
+      max-height: 580px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .locked-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 8, 12, 0.88);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      z-index: 10;
+    }
+
+    .locked-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 12px var(--gold));
+    }
+
+    .player-details {
+      padding: 16px 18px;
+      background: var(--card-bg);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .series-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .player-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .player-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* LISTA DE EPISÓDIOS */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 14px;
+    }
+
+    .section-head h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      color: #fff;
+    }
+
+    .episodes-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .episode-card {
+      display: flex;
+      gap: 14px;
+      padding: 10px;
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      align-items: center;
+    }
+
+    .episode-card:hover, .episode-card.active {
+      border-color: var(--gold);
+      background: rgba(30, 28, 20, 0.85);
+      transform: translateX(4px);
+    }
+
+    .ep-thumb-box {
+      width: 90px;
+      height: 90px;
+      border-radius: 10px;
+      background: #111;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .ep-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ep-badge-lock {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0,0,0,0.75);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    .ep-badge-free {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: #25d366;
+      color: #000;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.65rem;
+      font-weight: 800;
+    }
+
+    .ep-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ep-number {
+      font-size: 0.75rem;
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .ep-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 2px 0 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ep-price {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* MODAL DE PAGAMENTO & ADMIN */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-content {
+      background: #111118;
+      border: 1px solid var(--gold);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 440px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 22px;
+      position: relative;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.9);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .modal-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.25rem;
+      color: var(--gold-light);
+      margin-bottom: 6px;
+    }
+
+    .payment-opt {
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .payment-opt.selected {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: #050508;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--gold); }
+
+    /* NOTIFICAÇÃO USSD PUSH SIMULADO */
+    .ussd-box {
+      background: #1e1e24;
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    /* BANNER DE INSTALAÇÃO DO APP NO RODAPÉ */
+    .install-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(14, 14, 18, 0.95);
+      border-top: 1px solid var(--gold);
+      padding: 10px 16px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 99;
+      backdrop-filter: blur(10px);
+    }
+
+    .install-bar.visible { display: flex; }
+
+    .install-text {
+      font-size: 0.85rem;
+      color: #fff;
+    }
+    .install-text strong {
+      color: var(--gold-light);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CABEÇALHO -->
+  <header>
+    <div class="brand" onclick="location.reload()">
+      <img src="logo.png" alt="The Black Series Logo" onerror="this.src='https://via.placeholder.com/60x60/000000/d4af37?text=TBS'">
+      <div>
+        <div class="brand-title">THE BLACK SERIES</div>
+        <div class="brand-subtitle">100% Moçambicano 🇲🇿</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" onclick="openAdminModal()">➕ Publicar Vídeo</button>
+      <button class="btn btn-install" id="btnInstallApp" onclick="triggerPWAInstall()">📲 Baixar App</button>
+    </div>
+  </header>
+
+  <div class="container">
+    
+    <!-- BANNER VIP -->
+    <div class="vip-banner">
+      <div class="vip-info">
+        <h3>Passe Mensal VIP • 90 MT / mês</h3>
+        <p>Acesso total e ilimitado a todos os episódios de todas as séries moçambicanas.</p>
+      </div>
+      <button class="btn btn-gold" onclick="openPaymentModal(null, true)">Desbloquear Tudo (90 MT)</button>
+    </div>
+
+    <!-- REPRODUTOR PRINCIPAL -->
+    <div class="player-card">
+      <div class="video-wrapper">
+        <video id="mainVideoPlayer" controls playsinline poster="logo.png"></video>
+        <div class="locked-overlay" id="lockedOverlay" style="display: none;">
+          <div class="locked-icon">🔒</div>
+          <h3 style="font-family:'Cinzel'; margin-bottom: 8px;">Episódio Bloqueado</h3>
+          <p style="color:var(--text-muted); font-size:0.85rem; max-width:320px; margin-bottom:16px;">
+            Este episódio é exclusivo. Pague via e-Mola / M-Pesa para assistir na hora!
+          </p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+            <button class="btn btn-gold" id="btnUnlockEp" onclick="openPaymentModal(currentPlayingIndex, false)">Pagar Episódio (15 MT)</button>
+            <button class="btn btn-outline" onclick="openPaymentModal(null, true)">Passe Mensal (90 MT)</button>
+          </div>
+        </div>
+      </div>
+      <div class="player-details">
+        <div class="series-badge" id="currentSeriesBadge">A História de Amadeu • Top Série</div>
+        <h1 class="player-title" id="currentVideoTitle">Carregando...</h1>
+        <p class="player-desc" id="currentVideoDesc">Descrição do episódio...</p>
+      </div>
+    </div>
+
+    <!-- LISTA DE EPISÓDIOS -->
+    <div class="section-head">
+      <h2>Episódios Disponíveis</h2>
+      <span style="font-size:0.8rem; color:var(--gold);">Episódio 1 é Grátis</span>
+    </div>
+
+    <div class="episodes-grid" id="episodesList">
+      <!-- Inserido dinamicamente via JS -->
+    </div>
+
+  </div>
+
+  <!-- BARRA INFERIOR DE INSTALAÇÃO DO APLICATIVO -->
+  <div class="install-bar" id="installBottomBar">
+    <div class="install-text">
+      📱 <strong>Instalar The Black Series</strong><br>
+      Baixe o app no telemóvel para assistir mais rápido
+    </div>
+    <button class="btn btn-gold" onclick="triggerPWAInstall()">Instalar App</button>
+  </div>
+
+  <!-- MODAL DE PAGAMENTO (E-MOLA, M-PESA, PAYPAL) -->
+  <div class="modal" id="paymentModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('paymentModal')">&times;</button>
+      <h3 class="modal-title" id="payModalTitle">Confirmar Pagamento</h3>
+      <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:16px;" id="payModalDesc">
+        Pagamento automático via celular em Moçambique.
+      </p>
+
+      <!-- SELETOR DE MÉTODO -->
+      <div class="payment-opt selected" id="optEmola" onclick="selectMethod('emola')">
+        <strong style="color:var(--emola);">🟡 e-Mola (Movitel)</strong>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Número receptor oficial: <strong>876882323</strong></p>
+      </div>
+
+      <div class="payment-opt" id="optMpesa" onclick="selectMethod('mpesa')">
+        <strong style="color:var(--mpesa);">🔴 M-Pesa (Vodacom)</strong>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Número receptor oficial: <strong>876882323</strong></p>
+      </div>
+
+      <div class="payment-opt" id="optPaypal" onclick="selectMethod('paypal')">
+        <strong style="color:#0079C1;">🌐 PayPal (Internacional)</strong>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Conta oficial: <strong>enockpedroo@gmail.com</strong></p>
+      </div>
+
+      <!-- FORMULÁRIO TELEMÓVEL -->
+      <div id="phoneInputGroup" class="form-group">
+        <label>Digite seu número móvel:</label>
+        <input type="tel" id="payerPhone" class="form-input" placeholder="Ex: 87xxxxxxx ou 84xxxxxxx" value="87">
+      </div>
+
+      <!-- FORMULÁRIO PAYPAL -->
+      <div id="paypalInputGroup" class="form-group" style="display:none;">
+        <label>Seu e-mail do PayPal:</label>
+        <input type="email" id="payerEmail" class="form-input" placeholder="seu-email@gmail.com">
+      </div>
+
+      <!-- BOTÃO DE PAGAR -->
+      <button class="btn btn-gold" style="width:100%; justify-content:center; padding:12px; font-size:1rem;" onclick="processPayment()">
+        Confirmar e Assistir Agora
+      </button>
+
+      <!-- TELA USSD SIMULADA -->
+      <div class="ussd-box" id="ussdBox" style="display:none;">
+        <div style="font-size:1.1rem; margin-bottom:6px; font-weight:700;" id="ussdProvider">e-Mola</div>
+        <p style="font-size:0.8rem; margin-bottom:10px;">
+          Enviado pedido USSD para seu telefone.<br>
+          Transferir <strong id="ussdAmount">15 MT</strong> para <strong>876882323</strong>.
+        </p>
+        <input type="password" maxlength="4" placeholder="Digite seu PIN" class="form-input" style="text-align:center; letter-spacing:8px; font-size:1.4rem; margin-bottom:10px;">
+        <button class="btn btn-gold" style="width:100%; justify-content:center;" onclick="finishPayment()">Confirmar PIN no Celular</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE ADMIN: PUBLICAR NOVO VÍDEO -->
+  <div class="modal" id="adminModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('adminModal')">&times;</button>
+      <h3 class="modal-title">Publicar Novo Episódio</h3>
+      <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:16px;">
+        Adicione vídeos curtos diretamente do seu telemóvel ou coloque o link MP4.
+      </p>
+
+      <div class="form-group">
+        <label>Série:</label>
+        <select id="newEpSeries" class="form-input">
+          <option value="A História de Amadeu">A História de Amadeu (Top Série)</option>
+          <option value="A História de Celina">A História de Celina</option>
+          <option value="A História de Amani">A História de Amani</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Número do Episódio:</label>
+        <input type="text" id="newEpNumber" class="form-input" placeholder="Ex: Episódio 06">
+      </div>
+
+      <div class="form-group">
+        <label>Título do Episódio:</label>
+        <input type="text" id="newEpTitle" class="form-input" placeholder="Ex: O Confronto Final">
+      </div>
+
+      <div class="form-group">
+        <label>Sinopse / Descrição:</label>
+        <textarea id="newEpDesc" class="form-input" rows="2" placeholder="Resumo do episódio..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Arquivo de Vídeo (do seu Celular/PC):</label>
+        <input type="file" id="newEpFile" class="form-input" accept="video/mp4,video/webm">
+        <span style="font-size:0.72rem; color:var(--gold);">Ou use um link direto abaixo:</span>
+      </div>
+
+      <div class="form-group">
+        <label>Link do Vídeo (URL MP4 online):</label>
+        <input type="url" id="newEpUrl" class="form-input" placeholder="https://exemplo.com/video.mp4">
+      </div>
+
+      <div class="form-group">
+        <label>Acesso / Preço:</label>
+        <select id="newEpPrice" class="form-input">
+          <option value="0">Grátis (Episódio Piloto / Promocional)</option>
+          <option value="15" selected>15 MT (Bloqueado por padrão)</option>
+        </select>
+      </div>
+
+      <button class="btn btn-gold" style="width:100%; justify-content:center; padding:12px;" onclick="savePublishedEpisode()">
+        🚀 Publicar no Aplicativo
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // BASE DE DADOS DOS EPISÓDIOS (Armazenada no LocalStorage para persistência)
+    const DEFAULT_EPISODES = [
+      {
+        id: "amadeu-ep1",
+        series: "A História de Amadeu",
+        number: "Episódio 01",
+        title: "As Origens do Guerreiro",
+        desc: "O início da lenda de Amadeu. Prepare-se, o próximo episódio vai ser ainda mais forte! Siga nossa página oficial.",
+        videoUrl: "video_intro.mp4",
+        price: 0,
+        isFree: true,
+        thumb: "logo.png"
+      },
+      {
+        id: "amadeu-ep2",
+        series: "A História de Amadeu",
+        number: "Episódio 02",
+        title: "A Traição na Fronteira",
+        desc: "Emboscada inesperada testa a lealdade do clã em Cabo Delgado.",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        price: 15,
+        isFree: false,
+        thumb: "logo.png"
+      },
+      {
+        id: "amadeu-ep3",
+        series: "A História de Amadeu",
+        number: "Episódio 03",
+        title: "O Resgate Noturno",
+        desc: "Uma missão nas sombras de Rapale para recuperar a honra da família.",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        price: 15,
+        isFree: false,
+        thumb: "logo.png"
+      },
+      {
+        id: "amadeu-ep4",
+        series: "A História de Amadeu",
+        number: "Episódio 04",
+        title: "O Confronto em Nampula",
+        desc: "Inimigos cara a cara na batalha decisiva que definirá o futuro da região.",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+        price: 15,
+        isFree: false,
+        thumb: "logo.png"
+      }
+    ];
+
+    let episodes = JSON.parse(localStorage.getItem('tbs_episodes')) || DEFAULT_EPISODES;
+    let unlockedEpisodes = JSON.parse(localStorage.getItem('tbs_unlocked')) || ["amadeu-ep1"];
+    let isVipMonthly = JSON.parse(localStorage.getItem('tbs_vip_monthly')) || false;
+    let currentPlayingIndex = 0;
+    let selectedMethodName = 'emola';
+    let targetEpToPay = null;
+    let isBuyingVip = false;
+
+    // INICIALIZAÇÃO
+    window.addEventListener('DOMContentLoaded', () => {
+      renderEpisodes();
+      loadEpisode(0);
+      setupPWA();
+    });
+
+    // RENDERIZAR LISTA
+    function renderEpisodes() {
+      const container = document.getElementById('episodesList');
+      container.innerHTML = '';
+
+      episodes.forEach((ep, index) => {
+        const isUnlocked = isVipMonthly || ep.isFree || unlockedEpisodes.includes(ep.id);
+        const card = document.createElement('div');
+        card.className = `episode-card ${index === currentPlayingIndex ? 'active' : ''}`;
+        card.onclick = () => loadEpisode(index);
+
+        card.innerHTML = `
+          <div class="ep-thumb-box">
+            <img src="${ep.thumb}" onerror="this.src='logo.png'">
+            ${ep.isFree ? '<span class="ep-badge-free">GRÁTIS</span>' : (isUnlocked ? '<span class="ep-badge-free">LIBERADO</span>' : '<span class="ep-badge-lock">🔒 15 MT</span>')}
+          </div>
+          <div class="ep-info">
+            <div class="ep-number">${ep.series} • ${ep.number}</div>
+            <div class="ep-title">${ep.title}</div>
+            <div class="ep-price">${ep.isFree ? '100% Gratuito para todos' : (isUnlocked ? '✓ Acesso Liberado' : 'Pagar via e-Mola / M-Pesa')}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // CARREGAR EPISÓDIO
+    function loadEpisode(index) {
+      currentPlayingIndex = index;
+      const ep = episodes[index];
+      const video = document.getElementById('mainVideoPlayer');
+      const overlay = document.getElementById('lockedOverlay');
+
+      document.getElementById('currentSeriesBadge').innerText = `${ep.series} • ${ep.number}`;
+      document.getElementById('currentVideoTitle').innerText = ep.title;
+      document.getElementById('currentVideoDesc').innerText = ep.desc;
+
+      const isUnlocked = isVipMonthly || ep.isFree || unlockedEpisodes.includes(ep.id);
+
+      if (isUnlocked) {
+        overlay.style.display = 'none';
+        video.src = ep.videoUrl;
+        video.play().catch(e => console.log("Autoplay aguardando interação do usuário."));
+      } else {
+        video.pause();
+        video.removeAttribute('src');
+        overlay.style.display = 'flex';
+      }
+
+      renderEpisodes();
+    }
+
+    // MODAL DE PAGAMENTO
+    function openPaymentModal(epIndex, isVip) {
+      isBuyingVip = isVip;
+      targetEpToPay = (epIndex !== null) ? episodes[epIndex] : null;
+
+      const modal = document.getElementById('paymentModal');
+      const title = document.getElementById('payModalTitle');
+      const desc = document.getElementById('payModalDesc');
+
+      if (isVip) {
+        title.innerText = "Assinar Passe VIP Mensal";
+        desc.innerText = "Desbloqueie todos os episódios por apenas 90 MT / mês com renovação automática.";
+      } else {
+        title.innerText = `Desbloquear ${targetEpToPay.number}`;
+        desc.innerText = `Pague 15 MT para liberar este episódio imediatamente no seu telemóvel.`;
+      }
+
+      document.getElementById('ussdBox').style.display = 'none';
+      modal.classList.add('show');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    function selectMethod(method) {
+      selectedMethodName = method;
+      document.getElementById('optEmola').classList.toggle('selected', method === 'emola');
+      document.getElementById('optMpesa').classList.toggle('selected', method === 'mpesa');
+      document.getElementById('optPaypal').classList.toggle('selected', method === 'paypal');
+
+      document.getElementById('phoneInputGroup').style.display = (method === 'paypal') ? 'none' : 'block';
+      document.getElementById('paypalInputGroup').style.display = (method === 'paypal') ? 'block' : 'none';
+    }
+
+    function processPayment() {
+      const ussdBox = document.getElementById('ussdBox');
+      const ussdProvider = document.getElementById('ussdProvider');
+      const ussdAmount = document.getElementById('ussdAmount');
+
+      ussdBox.style.display = 'block';
+      ussdAmount.innerText = isBuyingVip ? "90 MT" : "15 MT";
+      ussdProvider.innerText = selectedMethodName === 'emola' ? "🟡 e-Mola (Movitel 876882323)" : (selectedMethodName === 'mpesa' ? "🔴 M-Pesa (Vodacom 876882323)" : "🌐 PayPal");
+    }
+
+    function finishPayment() {
+      if (isBuyingVip) {
+        isVipMonthly = true;
+        localStorage.setItem('tbs_vip_monthly', JSON.stringify(true));
+        alert("🎉 Parabéns! O seu Passe VIP Mensal de 90 MT foi ativado com sucesso. Todas as séries estão liberadas!");
+      } else if (targetEpToPay) {
+        if (!unlockedEpisodes.includes(targetEpToPay.id)) {
+          unlockedEpisodes.push(targetEpToPay.id);
+          localStorage.setItem('tbs_unlocked', JSON.stringify(unlockedEpisodes));
+        }
+        alert(`✅ Pagamento de 15 MT confirmado para ${targetEpToPay.number}!`);
+      }
+
+      closeModal('paymentModal');
+      loadEpisode(currentPlayingIndex);
+    }
+
+    // MODAL DE ADMIN (PUBLICAR NOVO VÍDEO)
+    function openAdminModal() {
+      document.getElementById('adminModal').classList.add('show');
+    }
+
+    function savePublishedEpisode() {
+      const series = document.getElementById('newEpSeries').value;
+      const num = document.getElementById('newEpNumber').value || `Episódio ${episodes.length + 1}`;
+      const title = document.getElementById('newEpTitle').value || "Sem título";
+      const desc = document.getElementById('newEpDesc').value || "Novo episódio imperdível de The Black Series.";
+      const price = parseInt(document.getElementById('newEpPrice').value);
+      const urlInput = document.getElementById('newEpUrl').value;
+      const fileInput = document.getElementById('newEpFile');
+
+      let videoUrl = urlInput || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4";
+
+      // Se enviou arquivo de vídeo direto do telemóvel
+      if (fileInput.files && fileInput.files[0]) {
+        videoUrl = URL.createObjectURL(fileInput.files[0]);
+      }
+
+      const newEp = {
+        id: "ep-" + Date.now(),
+        series: series,
+        number: num,
+        title: title,
+        desc: desc,
+        videoUrl: videoUrl,
+        price: price,
+        isFree: price === 0,
+        thumb: "logo.png"
+      };
+
+      episodes.push(newEp);
+      localStorage.setItem('tbs_episodes', JSON.stringify(episodes));
+
+      alert("🚀 Novo episódio publicado com sucesso na página!");
+      closeModal('adminModal');
+      renderEpisodes();
+      loadEpisode(episodes.length - 1);
+    }
+
+    // PWA: INSTALAÇÃO COMO APLICATIVO NATIVO NO CELULAR (ANDROID / IPHONE)
+    let deferredPrompt;
+    function setupPWA() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log("SW Reg Error:", err));
+      }
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('btnInstallApp').style.display = 'inline-flex';
+        document.getElementById('installBottomBar').classList.add('visible');
+      });
+
+      window.addEventListener('appinstalled', () => {
+        document.getElementById('installBottomBar').classList.remove('visible');
+        document.getElementById('btnInstallApp').style.display = 'none';
+        deferredPrompt = null;
+      });
+    }
+
+    function triggerPWAInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('Usuário aceitou instalar o aplicativo!');
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        alert("📲 Para baixar como aplicativo agora no seu celular:\n\n👉 No Android (Chrome): Toque nos 3 pontinhos no canto superior e selecione 'Adicionar à tela inicial' ou 'Instalar aplicativo'.\n\n👉 No iPhone (Safari): Toque no botão de Compartilhar e selecione 'Adicionar à Tela de Início'.");
+      }
+    }
+  </script>
+</body>
+</html>
